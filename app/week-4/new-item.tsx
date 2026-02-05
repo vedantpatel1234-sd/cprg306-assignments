@@ -3,12 +3,11 @@
 import { useState } from "react";
 
 export default function NewItem() {
-  // State variables
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [category, setCategory] = useState("produce");
 
-  // Validation state
+  // validation state
   const [nameTouched, setNameTouched] = useState(false);
 
   const nameIsInvalid = nameTouched && name.trim().length < 2;
@@ -17,11 +16,11 @@ export default function NewItem() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    // Force validation to show if user clicks submit with empty/short name
+    // show validation if user tries to submit
     setNameTouched(true);
 
-    // Strengthened validation
     if (!name || name.trim().length < 2) {
+      alert("Item name must be at least 2 characters long.");
       return;
     }
 
@@ -36,7 +35,7 @@ export default function NewItem() {
       `Added item:\nName: ${item.name}\nQuantity: ${item.quantity}\nCategory: ${item.category}`
     );
 
-    // Reset form
+    // reset
     setName("");
     setQuantity(1);
     setCategory("produce");
@@ -49,12 +48,10 @@ export default function NewItem() {
       className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
     >
       {/* Item Name */}
-      <label
-        htmlFor="name"
-        className="block text-sm font-medium text-slate-700"
-      >
+      <label htmlFor="name" className="block text-sm font-medium text-slate-700">
         Item Name
       </label>
+
       <input
         id="name"
         type="text"
@@ -62,11 +59,13 @@ export default function NewItem() {
         required
         onChange={(e) => setName(e.target.value)}
         onBlur={() => setNameTouched(true)}
+        onFocus={() => setNameTouched(false)}
         placeholder="e.g., apples"
         className={`mt-1 w-full rounded-md border p-2 outline-none text-black placeholder-gray-400 ${
           nameIsInvalid ? "border-red-500" : "border-slate-300"
         }`}
       />
+
       {nameIsInvalid && (
         <p className="mt-1 text-sm text-red-500">
           Name must be at least 2 characters.
@@ -80,6 +79,7 @@ export default function NewItem() {
       >
         Quantity
       </label>
+
       <input
         id="quantity"
         type="number"
@@ -98,6 +98,7 @@ export default function NewItem() {
       >
         Category
       </label>
+
       <select
         id="category"
         value={category}
@@ -117,7 +118,7 @@ export default function NewItem() {
         <option value="other">Other</option>
       </select>
 
-      {/* Submit Button */}
+      {/* Submit */}
       <button
         type="submit"
         disabled={formIsInvalid}
